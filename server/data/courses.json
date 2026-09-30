@@ -1,0 +1,35 @@
+[
+  {
+    "id": "c1",
+    "tag": "Beginner",
+    "icon": "🎓",
+    "color": "coral",
+    "title": "Careers in Psychology 101",
+    "desc": "Everything you need to choose your path — degrees, specializations, eligibility, jobs and scope in India & abroad.",
+    "price": "",
+    "link": "",
+    "createdAt": "2026-09-01T10:00:00.000Z"
+  },
+  {
+    "id": "c2",
+    "tag": "Foundations",
+    "icon": "🧠",
+    "color": "lav",
+    "title": "Understanding the Mind",
+    "desc": "Human behaviour and mental-health basics — how we think, feel and act, explained without the jargon.",
+    "price": "",
+    "link": "",
+    "createdAt": "2026-09-02T10:00:00.000Z"
+  },
+  {
+    "id": "c3",
+    "tag": "Wellbeing",
+    "icon": "🌱",
+    "color": "sage",
+    "title": "Mindful Living & Growth",
+    "desc": "Practical mindfulness, emotional regulation and self-growth tools you can use in daily life.",
+    "price": "",
+    "link": "",
+    "createdAt": "2026-09-03T10:00:00.000Z"
+  }
+]

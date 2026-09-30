@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+body {
+  font-family: "Nunito", system-ui, sans-serif;
+  color: #2f3a56;
+  background: #fef9f2;
+  line-height: 1.65;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+.brand {
+  font-family: "Quicksand", sans-serif;
+  line-height: 1.15;
+}
+
+@layer components {
+  /* ---------- Buttons ---------- */
+  .btn {
+    @apply inline-flex items-center gap-2 font-quicksand font-bold text-base px-6 py-3.5 rounded-full border-0 cursor-pointer transition-all duration-200 ease-out;
+  }
+  .btn:hover {
+    @apply -translate-y-1;
+  }
+  .btn-primary {
+    @apply bg-coral text-white shadow-[0_12px_22px_-10px_#ff8a73];
+  }
+  .btn-primary:hover {
+    @apply bg-coral-deep;
+  }
+  .btn-ghost {
+    @apply bg-white text-ink shadow-soft-sm;
+  }
+  .btn-line {
+    @apply bg-transparent border-2 border-ink text-ink;
+  }
+
+  /* ---------- Nav ---------- */
+  .eyebrow {
+    @apply font-quicksand font-bold tracking-[.14em] uppercase text-[.72rem] text-coral-deep inline-block mb-2.5;
+  }
+
+  /* ---------- Chips ---------- */
+  .chip {
+    @apply bg-white rounded-full px-4 py-1.5 text-[.8rem] font-bold font-quicksand shadow-soft-sm text-ink-soft;
+  }
+
+  /* ---------- Portrait / photo slot ---------- */
+  .blob {
+    @apply absolute inset-0 m-auto w-[112%] h-[112%] bg-gradient-to-br from-lav to-coral opacity-90 rounded-blob animate-morph z-0;
+  }
+  .photo-slot {
+    @apply relative z-[1] w-full max-w-[360px] aspect-[4/5] rounded-[38%_42%_44%_40%/40%_40%_44%_44%] border-[5px] border-white shadow-soft grid place-items-center text-center text-ink-soft p-6 overflow-hidden;
+    background: radial-gradient(circle at 50% 38%, #ffffff 0 62%, rgba(255, 255, 255, 0.4) 63%),
+      linear-gradient(135deg, #f4ecff, #ffe9e2);
+  }
+  .photo-slot img {
+    @apply w-full h-full object-cover;
+  }
+
+  /* ---------- Clouds ---------- */
+  .cloud {
+    @apply absolute fill-white opacity-90 z-[1];
+  }
+
+  /* ---------- Cards (services) ---------- */
+  .service-card {
+    @apply bg-card rounded-xl2 p-6 shadow-soft-sm border border-[#f0ece3] transition-all duration-200 relative hover:-translate-y-1.5 hover:shadow-soft;
+  }
+  .service-ic {
+    @apply w-14 h-14 rounded-2xl grid place-items-center text-white mb-4;
+  }
+
+  /* ---------- Feature row (about) ---------- */
+  .feat-ic {
+    @apply flex-none w-10 h-10 rounded-xl grid place-items-center text-white;
+  }
+
+  /* ---------- Courses ---------- */
+  .course-card {
+    @apply bg-white rounded-xl2 overflow-hidden shadow-soft-sm border border-[#f0ece3] flex flex-col transition-all duration-200 hover:-translate-y-1.5 hover:shadow-soft;
+  }
+  .course-top {
+    @apply h-[130px] grid place-items-center text-white relative;
+  }
+  .course-tag {
+    @apply absolute top-3 left-3 bg-white/90 text-ink font-quicksand font-bold text-[.72rem] px-3 py-1 rounded-full;
+  }
+
+  /* ---------- Book a session steps ---------- */
+  .step-card {
+    @apply bg-white rounded-xl2 p-6 text-center shadow-soft-sm;
+  }
+  .step-num {
+    @apply w-11 h-11 rounded-full bg-ink text-white font-quicksand font-bold grid place-items-center mx-auto mb-3;
+  }
+
+  /* ---------- Contact ---------- */
+  .contact-card {
+    @apply bg-white rounded-xl2 p-6 shadow-soft-sm border border-[#f0ece3];
+  }
+  .field-label {
+    @apply font-quicksand font-semibold text-[.85rem] block mt-3.5 mb-1;
+  }
+  .field-input {
+    @apply w-full px-4 py-3 border-[1.6px] border-line rounded-2xl font-nunito text-[.95rem] bg-[#fdfbf7] text-ink transition-colors duration-150 focus:outline-none focus:border-coral focus:bg-white;
+  }
+  .contact-ic {
+    @apply flex-none w-[46px] h-[46px] rounded-2xl grid place-items-center text-white;
+  }
+  .soc {
+    @apply w-[46px] h-[46px] rounded-2xl bg-ink text-white grid place-items-center transition-all duration-200 hover:-translate-y-1 hover:bg-coral;
+  }
+
+  /* ---------- Footer ---------- */
+  .foot-link {
+    @apply block text-[#aab3c9] py-1 text-[.92rem] transition-all duration-150 hover:text-white hover:pl-1;
+  }
+}
