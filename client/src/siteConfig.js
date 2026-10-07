@@ -1,6 +1,6 @@
 // ─────────────────────────────────────────────────────────────
 // DEFAULTS only. The owner now edits Instagram / LinkedIn / workshop text / payment links
-// herself in  Admin → ⚙️ Site settings  (saved on the server). Values saved there win;
+// herself in  Admin > Site settings  (saved on the server). Values saved there win;
 // the ones below are only the fallback if nothing has been saved yet.
 // Leave a value as "" and that button/link is simply hidden.
 // ─────────────────────────────────────────────────────────────
@@ -22,12 +22,13 @@ export const SITE = {
 };
 
 // Blog categories requested by the client (the admin can still type any new category).
+// `iconName` must match a key in the ICONS map in BlogPreview.jsx (lucide-react icons).
 export const BLOG_CATEGORIES = [
-  { name: "Psychology Careers", icon: "🎓", color: "bg-coral", desc: "Career paths, education, skills, earning ideas and professional opportunities." },
-  { name: "Parenting", icon: "🧸", color: "bg-sage", desc: "Understanding children, teenagers, communication and family dynamics." },
-  { name: "Relationships", icon: "❤️", color: "bg-lav", desc: "Psychological perspectives on conversations, connection and relationship patterns." },
-  { name: "Generational Issues", icon: "🌍", color: "bg-sun", desc: "Exploring how changing social environments and generational experiences influence the way we think and interact." },
-  { name: "Everyday Psychology", icon: "💭", color: "bg-coral", desc: "The psychology behind behaviours, choices, emotions and moments we confront in daily life." },
+  { name: "Psychology Careers", iconName: "GraduationCap", color: "bg-coral", desc: "Career paths, education, skills, earning ideas and professional opportunities." },
+  { name: "Parenting", iconName: "Baby", color: "bg-sage", desc: "Understanding children, teenagers, communication and family dynamics." },
+  { name: "Relationships", iconName: "HeartHandshake", color: "bg-lav", desc: "Psychological perspectives on conversations, connection and relationship patterns." },
+  { name: "Generational Issues", iconName: "Users", color: "bg-sun", desc: "Exploring how changing social environments and generational experiences influence the way we think and interact." },
+  { name: "Everyday Psychology", iconName: "Brain", color: "bg-coral", desc: "The psychology behind behaviours, choices, emotions and moments we confront in daily life." },
 ];
 
 // Workshop page content — client will send photos / theme text / sample design.
