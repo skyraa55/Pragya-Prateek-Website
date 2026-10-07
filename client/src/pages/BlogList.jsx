@@ -1,18 +1,24 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { api } from "../api.js";
+import { BLOG_CATEGORIES } from "../siteConfig.js";
 import BlogCard from "../components/BlogCard.jsx";
 
 export default function BlogList() {
   const [posts, setPosts] = useState(null);
   const [error, setError] = useState("");
-  const [cat, setCat] = useState("All");
+  const [params] = useSearchParams();
+  const [cat, setCat] = useState(params.get("cat") || "All");
+  useEffect(() => { setCat(params.get("cat") || "All"); }, [params]);
 
   useEffect(() => {
-    document.title = "Blog — Pragya Prateek";
+    document.title = "Blogs — Pragya Prateek";
     api.getBlogs().then(setPosts).catch((e) => setError(e.message));
   }, []);
 
-  const categories = posts ? ["All", ...new Set(posts.map((p) => p.category))] : [];
+  const categories = posts
+    ? ["All", ...new Set([...BLOG_CATEGORIES.map((c) => c.name), ...posts.map((p) => p.category).filter(Boolean)])]
+    : [];
   const shown = posts ? posts.filter((p) => cat === "All" || p.category === cat) : [];
 
   return (
@@ -20,10 +26,10 @@ export default function BlogList() {
       <div className="w-[92%] max-w-[1120px] mx-auto">
         <div className="text-center max-w-[60ch] mx-auto mb-8">
           <span className="eyebrow">Blog</span>
-          <h1 className="text-[clamp(1.9rem,5vw,2.8rem)] font-bold">Reads for a mindful life</h1>
+          <h1 className="text-[clamp(1.9rem,5vw,2.8rem)] font-bold">Mental Health, Careers &amp; Everyday Life</h1>
         </div>
 
-        {categories.length > 2 && (
+        {categories.length > 1 && (
           <div className="flex flex-wrap gap-2 justify-center mb-8">
             {categories.map((c) => (
               <button

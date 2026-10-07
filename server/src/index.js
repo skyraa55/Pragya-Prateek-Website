@@ -10,6 +10,8 @@ import authRoutes from "./routes/auth.js";
 import mailRoutes from "./routes/mail.js";
 import blogRoutes from "./routes/blogs.js";
 import courseRoutes from "./routes/courses.js";
+import settingsRoutes from "./routes/settings.js";
+import paymentRoutes, { webhookHandler } from "./routes/payments.js";
 
 // Refuse to start with an unsafe/missing admin setup.
 const missing = ["JWT_SECRET", "ADMIN_EMAIL"].filter((k) => !process.env[k]);
@@ -23,12 +25,28 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.set("trust proxy", 1); // correct client IPs behind Render/Railway/Nginx (for rate limiting)
-app.use(helmet());
+// Razorpay Checkout loads a script + iframe from razorpay.com, so the default CSP is widened for exactly those hosts.
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+        "script-src": ["'self'", "https://checkout.razorpay.com"],
+        "frame-src": ["'self'", "https://api.razorpay.com", "https://checkout.razorpay.com"],
+        "connect-src": ["'self'", "https://api.razorpay.com", "https://lumberjack.razorpay.com", "https://checkout.razorpay.com"],
+        "img-src": ["'self'", "data:", "https:"],
+      },
+    },
+    crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" }, // lets UPI / bank pop-ups talk back
+  })
+);
 app.use(
   cors({
     origin: (process.env.CLIENT_ORIGIN || "http://localhost:5173").split(",").map((s) => s.trim()),
   })
 );
+// Webhook needs the RAW body (its signature covers the exact bytes), so it is registered before express.json().
+app.post("/api/payments/webhook", express.raw({ type: "*/*", limit: "100kb" }), webhookHandler);
 app.use(express.json({ limit: "200kb" }));
 
 app.get("/api/health", (_req, res) => res.json({ ok: true }));
@@ -36,6 +54,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api", mailRoutes); // POST /api/bookings, /api/contact
 app.use("/api/blogs", blogRoutes);
 app.use("/api/courses", courseRoutes);
+app.use("/api/settings", settingsRoutes);
+app.use("/api/payments", paymentRoutes);
 
 // Optional: if the frontend has been built (client/dist), serve it from this same server.
 const dist = path.join(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "client", "dist");

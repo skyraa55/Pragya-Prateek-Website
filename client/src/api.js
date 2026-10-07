@@ -47,7 +47,9 @@ export const api = {
   getBlogs: () => request("/blogs"),
   getBlog: (slug) => request(`/blogs/${encodeURIComponent(slug)}`),
   getCourses: () => request("/courses"),
+  getSettings: () => request("/settings"),
   sendBooking: (form) => request("/bookings", { method: "POST", body: form }),
+  verifyPayment: (p) => request("/payments/verify", { method: "POST", body: p }),
   sendContact: (form) => request("/contact", { method: "POST", body: form }),
 
   // admin only (need the login token)
@@ -57,6 +59,9 @@ export const api = {
   createBlog: (b) => request("/blogs", { method: "POST", body: b, auth: true }),
   updateBlog: (id, b) => request(`/blogs/${id}`, { method: "PUT", body: b, auth: true }),
   deleteBlog: (id) => request(`/blogs/${id}`, { method: "DELETE", auth: true }),
+  adminBookings: () => request("/bookings", { auth: true }),
+  deleteBooking: (id) => request(`/bookings/${id}`, { method: "DELETE", auth: true }),
+  updateSettings: (s) => request("/settings", { method: "PUT", body: s, auth: true }),
   createCourse: (c) => request("/courses", { method: "POST", body: c, auth: true }),
   updateCourse: (id, c) => request(`/courses/${id}`, { method: "PUT", body: c, auth: true }),
   deleteCourse: (id) => request(`/courses/${id}`, { method: "DELETE", auth: true }),

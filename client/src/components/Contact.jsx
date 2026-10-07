@@ -1,15 +1,17 @@
 import { useState } from "react";
 import { api } from "../api.js";
+import { useSite } from "../useSite.js";
 
 const TOPICS = [
-  "Career Guidance",
-  "Counselling & Support",
-  "Parenting & Relationships",
-  "Personal Growth",
-  "A course enquiry",
+  "A career doubt",
+  "A collaboration idea",
+  "A workshop enquiry",
+  "A professional enquiry",
+  "A general question",
 ];
 
 export default function Contact() {
+  const SITE = useSite();
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -43,9 +45,9 @@ export default function Contact() {
       <div className="w-[92%] max-w-[1120px] mx-auto">
         <div className="text-center max-w-[60ch] mx-auto mb-7">
           <span className="eyebrow">Contact</span>
-          <h2 className="text-[clamp(1.7rem,5vw,2.6rem)] font-bold mb-1">Get in touch</h2>
+          <h2 className="text-[clamp(1.7rem,5vw,2.6rem)] font-bold mb-1">Let's Connect</h2>
           <p className="text-ink-soft text-[1.05rem] mt-2 mx-auto">
-            Have a question or want to book? Send a note — I read every message.
+            Have a question, collaboration idea, career doubt or professional enquiry? You can get in touch using the contact form below.
           </p>
         </div>
 
@@ -54,7 +56,7 @@ export default function Contact() {
           <div className="contact-card">
             <form onSubmit={handleSubmit}>
               <label className="field-label" htmlFor="name">
-                Your name
+                Name
               </label>
               <input
                 className="field-input"
@@ -82,7 +84,7 @@ export default function Contact() {
               />
 
               <label className="field-label" htmlFor="topic">
-                What's it about?
+                What would you like to discuss?
               </label>
               <select
                 className="field-input"
@@ -142,64 +144,23 @@ export default function Contact() {
 
           {/* DETAILS */}
           <div>
-            <div className="flex flex-col gap-4">
-              <div className="flex gap-[.9rem] items-center">
-                <span className="contact-ic bg-coral">✉️</span>
-                <div>
-                  <b className="font-quicksand">Email</b>
-                  <br />
-                  <span className="text-ink-soft text-[.92rem]">
-                    hello@yourdomain.com {/* ← add your email */}
-                  </span>
-                </div>
-              </div>
-              <div className="flex gap-[.9rem] items-center">
-                <span className="contact-ic bg-sage">💬</span>
-                <div>
-                  <b className="font-quicksand">WhatsApp</b>
-                  <br />
-                  <span className="text-ink-soft text-[.92rem]">
-                    +91 ————— {/* ← add number */}
-                  </span>
-                </div>
-              </div>
-              <div className="flex gap-[.9rem] items-center">
-                <span className="contact-ic bg-lav">📍</span>
-                <div>
-                  <b className="font-quicksand">Based in</b>
-                  <br />
-                  <span className="text-ink-soft text-[.92rem]">
-                    Online sessions, India & worldwide
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <h5 className="font-quicksand font-bold mt-6 mb-1">Follow along</h5>
-            <div className="flex gap-[.6rem] mt-1 flex-wrap">
-              <a
-                className="soc"
-                href="https://youtube.com/@pragya_prateek_psychologist"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="YouTube"
-              >
-                ▶
-              </a>
-              <a className="soc" href="#" aria-label="Instagram">
-                ◎
-              </a>
-              <a className="soc" href="#" aria-label="LinkedIn">
-                in
-              </a>
-            </div>
-
-            <div className="contact-card mt-5 bg-gradient-to-br from-[#eef4ff] to-[#fbf0ff] border-0">
-              <b className="font-quicksand">🎥 8,000+ minds already learning</b>
-              <p className="text-ink-soft text-[.92rem] mt-1.5">
-                Join the community on <em>The Art of Mindful Thinking</em> for weekly psychology
-                & life insights.
+            <div className="contact-card bg-gradient-to-br from-[#eef4ff] to-[#fbf0ff] border-0">
+              <b className="font-quicksand text-[1.1rem]">Wherever you are in your journey</b>
+              <p className="text-ink-soft text-[.95rem] mt-2">
+                Psychology student, professional or simply curious — send me a message and tell me
+                what you'd like to discuss.
               </p>
+            </div>
+
+            <h5 className="font-quicksand font-bold mt-6 mb-1">Find me online</h5>
+            <div className="flex gap-[.6rem] mt-1 flex-wrap">
+              <a className="soc" href={SITE.youtubeUrl} target="_blank" rel="noopener noreferrer" aria-label="YouTube">▶</a>
+              {SITE.instagramUrl && (
+                <a className="soc" href={SITE.instagramUrl} target="_blank" rel="noopener noreferrer" aria-label="Instagram">◎</a>
+              )}
+              {SITE.linkedinUrl && (
+                <a className="soc" href={SITE.linkedinUrl} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">in</a>
+              )}
             </div>
           </div>
         </div>

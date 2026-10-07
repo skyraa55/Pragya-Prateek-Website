@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { api, getToken, setToken } from "../api.js";
 import BlogManager from "../admin/BlogManager.jsx";
 import CourseManager from "../admin/CourseManager.jsx";
+import SettingsManager from "../admin/SettingsManager.jsx";
+import BookingsManager from "../admin/BookingsManager.jsx";
 
 function Login({ onLoggedIn }) {
   const [email, setEmail] = useState("");
@@ -27,7 +29,7 @@ function Login({ onLoggedIn }) {
   return (
     <div className="max-w-[420px] mx-auto contact-card">
       <h1 className="text-[1.6rem] font-bold mb-1">Owner login</h1>
-      <p className="text-ink-soft text-[.92rem]">Only the site owner can add or edit blogs and courses.</p>
+      <p className="text-ink-soft text-[.92rem]">Only the site owner can add or edit blogs, courses and site settings.</p>
       <form onSubmit={submit}>
         <label className="field-label" htmlFor="a-email">Email</label>
         <input className="field-input" id="a-email" type="email" required autoComplete="username"
@@ -95,8 +97,8 @@ export default function Admin() {
               </button>
             </div>
 
-            <div className="flex gap-2 mb-6">
-              {[["blogs", "📝 Blog posts"], ["courses", "🎓 Courses"]].map(([id, label]) => (
+            <div className="flex gap-2 mb-6 flex-wrap">
+              {[["blogs", "📝 Blog posts"], ["courses", "🎓 Courses"], ["bookings", "📅 Bookings & payments"], ["settings", "⚙️ Site settings"]].map(([id, label]) => (
                 <button key={id} onClick={() => setTab(id)}
                   className={`chip cursor-pointer border-0 !text-[.9rem] !px-5 !py-2 ${tab === id ? "!bg-ink !text-white" : ""}`}>
                   {label}
@@ -104,11 +106,10 @@ export default function Admin() {
               ))}
             </div>
 
-            {tab === "blogs" ? (
-              <BlogManager onAuthError={onAuthError} />
-            ) : (
-              <CourseManager onAuthError={onAuthError} />
-            )}
+            {tab === "blogs" && <BlogManager onAuthError={onAuthError} />}
+            {tab === "courses" && <CourseManager onAuthError={onAuthError} />}
+            {tab === "bookings" && <BookingsManager onAuthError={onAuthError} />}
+            {tab === "settings" && <SettingsManager onAuthError={onAuthError} />}
           </>
         )}
       </div>

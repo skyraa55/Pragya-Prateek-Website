@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { api, formatDate } from "../api.js";
 import { BG } from "../constants.js";
 import { ColorPicker, Notice } from "./Fields.jsx";
+import { BLOG_CATEGORIES } from "../siteConfig.js";
 
 const blank = { title: "", category: "", icon: "📝", color: "coral", excerpt: "", content: "", published: true };
 
@@ -68,7 +69,8 @@ export default function BlogManager({ onAuthError }) {
         <div className="grid grid-cols-[1fr_90px] gap-3">
           <div>
             <label className="field-label" htmlFor="bl-cat">Category</label>
-            <input id="bl-cat" className="field-input" maxLength={40} placeholder="e.g. Mindfulness" value={form.category} onChange={set("category")} />
+            <input id="bl-cat" className="field-input" maxLength={40} placeholder="Pick or type a category" list="blog-cats" value={form.category} onChange={set("category")} />
+            <datalist id="blog-cats">{BLOG_CATEGORIES.map((c) => <option key={c.name} value={c.name} />)}</datalist>
           </div>
           <div>
             <label className="field-label" htmlFor="bl-icon">Emoji</label>

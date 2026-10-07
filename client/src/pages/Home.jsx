@@ -1,21 +1,17 @@
 import Hero from "../components/Hero.jsx";
-import About from "../components/About.jsx";
-import Services from "../components/Services.jsx";
-import Courses from "../components/Courses.jsx";
+import Intro from "../components/Intro.jsx";
 import BlogPreview from "../components/BlogPreview.jsx";
-import Book from "../components/Book.jsx";
-import Contact from "../components/Contact.jsx";
+import FinalCTA from "../components/FinalCTA.jsx";
+import { usePageTitle } from "../usePageTitle.js";
 
 export default function Home() {
+  usePageTitle("");
   return (
     <>
       <Hero />
-      <About />
-      <Services />
-      <Courses />
+      <Intro />
       <BlogPreview />
-      <Book />
-      <Contact />
+      <FinalCTA />
     </>
   );
 }

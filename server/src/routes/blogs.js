@@ -10,7 +10,7 @@ function parse(body) {
   const data = {
     title: clean(body?.title, 150),
     excerpt: clean(body?.excerpt, 300),
-    category: clean(body?.category, 40) || "Psychology",
+    category: clean(body?.category, 40) || "Everyday Psychology",
     icon: clean(body?.icon, 8) || "📝",
     color,
     content: clean(body?.content, 50000),

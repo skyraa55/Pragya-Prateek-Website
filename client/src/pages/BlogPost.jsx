@@ -63,7 +63,7 @@ export default function BlogPost() {
             <div className="bg-white rounded-xl2 p-7 text-center shadow-soft mt-10">
               <h3 className="text-[1.2rem] font-bold mb-1">Want to talk this through?</h3>
               <p className="text-ink-soft mb-4">Book a one-on-one session, online, from anywhere.</p>
-              <Link to="/#book" className="btn btn-primary">
+              <Link to="/book" className="btn btn-primary">
                 Book a Session →
               </Link>
             </div>
