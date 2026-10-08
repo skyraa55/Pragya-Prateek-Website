@@ -7,10 +7,10 @@ const CARD_IMAGES = {
   everyday: "Everyday Psychology.png",
 };
 
-/* ---------- Arrow icon ---------- */
+/* ---------- Arrow icon (size is controlled by CSS) ---------- */
 function ArrowIcon() {
   return (
-    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <path
         d="M5 12h14M13 6l6 6-6 6"
         stroke="currentColor"
@@ -56,30 +56,40 @@ export default function Intro() {
           --c-bg: #fffaf5;
           --c-line: #eadfd6;
 
+          /* fluid button sizes: they grow smoothly from small phones to large screens */
+          --btn-font: clamp(.78rem, 1.4vw + .55rem, .93rem);
+          --btn-arrow: clamp(28px, 2vw + 20px, 38px);
+          --btn-pad: clamp(.25rem, .5vw + .12rem, .45rem);
+          --btn-pad-left: clamp(.9rem, 1.2vw + .6rem, 1.3rem);
+          --btn-gap: clamp(.5rem, 1vw + .2rem, .9rem);
+          --orb: clamp(44px, 4vw + 28px, 64px);
+
           background: var(--c-bg);
           color: var(--c-navy);
-          padding: clamp(3rem, 8vw, 5.5rem) 0 clamp(3.5rem, 9vw, 6.5rem);
+          padding: clamp(2.5rem, 8vw, 5.5rem) 0 clamp(3rem, 9vw, 6.5rem);
           overflow-x: hidden;
         }
         .intro *, .intro *::before, .intro *::after { box-sizing: border-box; }
 
         .intro-wrap {
-          width: min(92%, 1060px);
+          width: 100%;
+          max-width: 1060px;
           margin: 0 auto;
+          padding: 0 clamp(1rem, 4vw, 2rem);
         }
 
         /* ---------- Heading (centered) ---------- */
         .intro-head {
           max-width: 700px;
-          margin: 0 auto clamp(2.25rem, 6vw, 3.5rem);
+          margin: 0 auto clamp(1.75rem, 6vw, 3.5rem);
           text-align: center;
         }
         .intro-title {
-          font-size: clamp(2rem, 5vw, 3.1rem);
+          font-size: clamp(1.6rem, 6vw, 3.1rem);
           font-weight: 700;
           line-height: 1.15;
           letter-spacing: -0.02em;
-          margin: 0 0 1.5rem;
+          margin: 0 0 clamp(1rem, 3vw, 1.5rem);
         }
 
         /* animated "Psychology" word */
@@ -113,27 +123,28 @@ export default function Intro() {
 
         .intro-text {
           color: var(--c-navy-soft);
-          font-size: clamp(.97rem, 2.4vw, 1.08rem);
-          line-height: 1.75;
-          margin: 0 0 1rem;
+          font-size: clamp(.88rem, 2.6vw, 1.08rem);
+          line-height: 1.7;
+          margin: 0 0 .85rem;
           overflow-wrap: anywhere;
         }
         .intro-text strong {
           color: var(--c-navy);
           font-weight: 700;
         }
+
         /* ---------- Lead line ("two key areas") ---------- */
         .intro-lead {
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: .6rem;
-          margin-top: 3rem;
+          gap: .5rem;
+          margin-top: clamp(1.75rem, 6vw, 3rem);
         }
         .intro-lead-row {
           display: flex;
           align-items: center;
-          gap: 1.25rem;
+          gap: clamp(.75rem, 2.5vw, 1.25rem);
           width: 100%;
         }
         .intro-lead-row::before,
@@ -154,7 +165,7 @@ export default function Intro() {
           font-family: "Playfair Display", Georgia, "Times New Roman", serif;
           font-style: italic;
           font-weight: 600;
-          font-size: clamp(1.35rem, 3.6vw, 2rem);
+          font-size: clamp(1.2rem, 4.2vw, 2rem);
           line-height: 1.3;
           letter-spacing: -0.005em;
           color: var(--c-navy);
@@ -171,6 +182,8 @@ export default function Intro() {
           animation: introFlow 7s ease-in-out infinite;
         }
         .intro-lead-arrow {
+          width: clamp(20px, 4vw, 26px);
+          height: clamp(20px, 4vw, 26px);
           color: var(--c-pink);
           animation: introBounce 1.8s ease-in-out infinite;
         }
@@ -178,17 +191,12 @@ export default function Intro() {
           0%, 100% { transform: translateY(0); opacity: .6; }
           50%      { transform: translateY(6px); opacity: 1; }
         }
-        @media (max-width: 560px) {
-          .intro-lead-row::before,
-          .intro-lead-row::after { flex: 0 0 22px; }
-          .intro-lead-row { justify-content: center; gap: .75rem; }
-        }
 
         /* ---------- Cards ---------- */
         .intro-grid {
           display: grid;
           grid-template-columns: 1fr;
-          gap: 1.75rem;
+          gap: clamp(1.1rem, 3vw, 1.75rem);
         }
         @media (min-width: 768px) {
           .intro-grid { grid-template-columns: 1fr 1fr; }
@@ -198,7 +206,7 @@ export default function Intro() {
           display: flex;
           flex-direction: column;
           overflow: hidden;
-          border-radius: 20px;
+          border-radius: clamp(16px, 2vw, 20px);
           background: #fff;
           border: 1px solid var(--c-line);
           box-shadow: 0 10px 30px rgba(20, 39, 78, .06);
@@ -240,6 +248,8 @@ export default function Intro() {
           display: flex;
           align-items: center;
           justify-content: center;
+          padding: 0 1rem;
+          text-align: center;
           color: var(--c-navy-soft);
           font-size: .9rem;
         }
@@ -249,20 +259,21 @@ export default function Intro() {
           display: flex;
           flex-direction: column;
           flex: 1;
-          padding: 1.75rem 1.75rem 2rem;
+          padding: clamp(1.15rem, 3vw, 1.75rem) clamp(1.1rem, 3vw, 1.75rem) clamp(1.3rem, 3.5vw, 2rem);
           background: linear-gradient(180deg, #fff 0%, var(--tint) 100%);
         }
         .intro-card h3 {
-          font-size: 1.3rem;
+          font-size: clamp(1.1rem, 2.2vw, 1.3rem);
           font-weight: 700;
           letter-spacing: -0.01em;
-          margin: 0 0 .65rem;
+          line-height: 1.3;
+          margin: 0 0 .6rem;
         }
         .intro-card p {
           color: var(--c-navy-soft);
-          font-size: .97rem;
-          line-height: 1.7;
-          margin: 0 0 1.6rem;
+          font-size: clamp(.88rem, 1.8vw, .97rem);
+          line-height: 1.65;
+          margin: 0 0 clamp(1.1rem, 3vw, 1.6rem);
           flex: 1;
         }
 
@@ -271,14 +282,17 @@ export default function Intro() {
           position: relative;
           overflow: hidden;
           isolation: isolate;
-          align-self: flex-start;
+          align-self: flex-start;        /* never stretches: stays only as wide as its content */
+          max-width: 100%;
           display: inline-flex;
           align-items: center;
-          gap: .9rem;
-          padding: .45rem .45rem .45rem 1.3rem;
+          justify-content: space-between;
+          gap: var(--btn-gap);
+          padding: var(--btn-pad) var(--btn-pad) var(--btn-pad) var(--btn-pad-left);
           border-radius: 999px;
-          font-size: .93rem;
+          font-size: var(--btn-font);
           font-weight: 700;
+          line-height: 1.25;
           color: var(--c-navy);
           text-decoration: none;
           background:
@@ -288,7 +302,7 @@ export default function Intro() {
           backdrop-filter: blur(14px) saturate(180%);
           border: 1.5px solid rgba(255, 255, 255, .9);
           box-shadow:
-            0 10px 24px rgba(var(--glow), .25),
+            0 8px 20px rgba(var(--glow), .22),
             inset 0 1.5px 0 rgba(255, 255, 255, .95),
             inset 0 -8px 16px rgba(var(--glow), .12);
           transition:
@@ -303,10 +317,10 @@ export default function Intro() {
           content: "";
           position: absolute;
           z-index: -1;
-          width: 64px;
-          height: 64px;
+          width: var(--orb);
+          height: var(--orb);
           border-radius: 50%;
-          filter: blur(14px);
+          filter: blur(12px);
           opacity: .75;
           transition: scale .8s cubic-bezier(.22, 1, .36, 1), opacity .4s ease;
         }
@@ -331,17 +345,22 @@ export default function Intro() {
           50%      { translate: -90px -8px; }
         }
 
-        .intro-btn-text { position: relative; z-index: 1; }
+        .intro-btn-text {
+          position: relative;
+          z-index: 1;
+          min-width: 0;
+        }
 
         /* glass arrow bubble */
         .intro-btn-arrow {
           position: relative;
           z-index: 1;
+          flex: none;
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          width: 38px;
-          height: 38px;
+          width: var(--btn-arrow);
+          height: var(--btn-arrow);
           border-radius: 50%;
           overflow: hidden;
           color: var(--a1);
@@ -353,6 +372,8 @@ export default function Intro() {
         /* old arrow slides out right, a new one slides in from left */
         .intro-btn-arrow svg {
           position: absolute;
+          width: clamp(13px, .6vw + 10px, 16px);
+          height: clamp(13px, .6vw + 10px, 16px);
           transition: transform .45s cubic-bezier(.22, 1, .36, 1);
         }
         .intro-btn-arrow svg:nth-child(2) { transform: translateX(-28px); }
@@ -382,7 +403,7 @@ export default function Intro() {
 
         /* Large desktops / TVs */
         @media (min-width: 1440px) {
-          .intro-wrap { width: min(92%, 1200px); }
+          .intro-wrap { max-width: 1200px; }
           .intro-head { max-width: 780px; }
           .intro-grid { gap: 2.25rem; }
           .intro-body { padding: 2rem 2rem 2.25rem; }
@@ -390,44 +411,32 @@ export default function Intro() {
           .intro-card p { font-size: 1.03rem; }
         }
 
-        /* Small laptops / tablets landscape */
-        @media (max-width: 1024px) {
-          .intro-grid { gap: 1.5rem; }
-        }
-
-        /* Tablets portrait */
+        /* Tablets portrait: single column, centred, not stretched edge to edge */
         @media (max-width: 767px) {
           .intro-grid {
             max-width: 560px;
             margin: 0 auto;
           }
           .intro-media { aspect-ratio: 16 / 10; }
-          .intro-btn { align-self: flex-start; }
         }
 
-        /* Phones */
-        @media (max-width: 560px) {
-          .intro-body { padding: 1.4rem 1.25rem 1.6rem; }
-          .intro-card { border-radius: 16px; }
-          .intro-card h3 { font-size: 1.2rem; }
-          .intro-card p { font-size: .95rem; margin-bottom: 1.25rem; }
-          .intro-lead { margin-top: 2.25rem; }
+        /* Small tablets in two columns: tighter card body so text and button fit */
+        @media (min-width: 768px) and (max-width: 900px) {
+          .intro-body { padding: 1.25rem 1.1rem 1.4rem; }
+        }
 
-          /* button fills the card width so it's easy to tap */
-          .intro-btn {
-            align-self: stretch;
-            justify-content: space-between;
-            padding-left: 1.1rem;
-            font-size: .9rem;
-          }
+        /* Phones: the lines beside the lead text become short accents */
+        @media (max-width: 560px) {
+          .intro-lead-row { justify-content: center; }
+          .intro-lead-row::before,
+          .intro-lead-row::after { flex: 0 0 18px; }
         }
 
         /* Very small phones */
-        @media (max-width: 380px) {
-          .intro-wrap { width: 94%; }
-          .intro-btn { gap: .5rem; font-size: .85rem; }
-          .intro-btn-arrow { width: 34px; height: 34px; }
-          .intro-lead-title { font-size: 1.25rem; }
+        @media (max-width: 360px) {
+          .intro-lead-row::before,
+          .intro-lead-row::after { display: none; }
+          .intro-btn { padding-left: .85rem; }
         }
 
         /* Touch devices: no sticky hover lift on cards */
@@ -477,8 +486,6 @@ export default function Intro() {
             <svg
               className="intro-lead-arrow"
               viewBox="0 0 24 24"
-              width="26"
-              height="26"
               fill="none"
               aria-hidden="true"
             >
