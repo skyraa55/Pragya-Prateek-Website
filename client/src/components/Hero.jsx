@@ -94,21 +94,38 @@ export default function Hero() {
         .hero-title   { font-size: clamp(2.1rem, 9vw, 3rem); line-height: 1.05; margin-bottom: 14px; }
         .hero-tagline { font-size: 1.1rem; line-height: 1.35; margin-bottom: 10px; max-width: 34ch; }
         .hero-desc    { font-size: .92rem; line-height: 1.65; margin-bottom: 20px; max-width: 50ch; }
-        .hero-btn     { font-size: .95rem; padding: 12px 22px; white-space: nowrap; }
+
+        /* Buttons on phones: compact + fluid (scale with screen width) */
+        .hero-btn {
+          font-size: clamp(.74rem, 3.3vw, .88rem);
+          padding: clamp(8px, 2.3vw, 10px) clamp(14px, 4.4vw, 20px);
+          white-space: nowrap;
+          line-height: 1.2;
+        }
 
         /* two buttons on the first row, "Book a Session" on the next row, centred under them */
         .hero-banner .hero-btns {
-          display: grid; grid-template-columns: repeat(2, auto);
-          justify-content: start; gap: 12px;
+          display: grid;
+          grid-template-columns: repeat(2, auto);
+          justify-content: start;
+          gap: 10px;
+          max-width: 100%;
         }
         .hero-banner .hero-btns .hero-btn-yellow { grid-column: 1 / -1; justify-self: center; }
 
-        /* ---------- Small phones: three buttons stack neatly, full width ---------- */
+        /* ---------- Small phones ---------- */
         @media (max-width: 479px) {
-          .hero-banner { min-height: 680px; }
-          .hero-banner .hero-btns { grid-template-columns: 1fr; max-width: 300px; }
-          .hero-banner .hero-btns .hero-btn { justify-content: center; }
-          .hero-banner .hero-btns .hero-btn-yellow { justify-self: stretch; }
+          .hero-banner { min-height: 640px; }
+          .hero-text { padding: 24px 18px 28px; }
+          .hero-banner .hero-btns { gap: 8px; }
+          .hero-banner .hero-btn { gap: 6px; }
+        }
+
+        /* ---------- Extra-small phones (≤ 359px) ---------- */
+        @media (max-width: 359px) {
+          .hero-text { width: 96%; padding: 22px 14px 26px; }
+          .hero-banner .hero-btns { grid-template-columns: repeat(2, minmax(0, auto)); gap: 6px; }
+          .hero-btn { font-size: .72rem; padding: 8px 12px; }
         }
 
         /* ---------- Tablets ---------- */
@@ -123,7 +140,8 @@ export default function Hero() {
           .hero-title { font-size: clamp(2.4rem, 6vw, 3.4rem); }
           .hero-tagline { font-size: 1.2rem; }
           .hero-desc { font-size: 1rem; }
-          .hero-btn { font-size: .92rem; padding: 12px 18px; }
+          .hero-btn { font-size: .88rem; padding: 10px 18px; }
+          .hero-banner .hero-btns { gap: 12px; }
         }
 
         /* ---------- Desktop: image pinned right at full height, text on the left ---------- */
@@ -168,7 +186,7 @@ export default function Hero() {
 
         /* ---------- Buttons: glassmorphism ---------- */
         .hero-banner .hero-btn {
-          display: inline-flex; align-items: center; gap: 8px;
+          display: inline-flex; align-items: center; justify-content: center; gap: 8px;
           border-radius: 999px; font-weight: 800; letter-spacing: .01em;
           text-decoration: none; position: relative;
           -webkit-backdrop-filter: blur(12px) saturate(170%);
