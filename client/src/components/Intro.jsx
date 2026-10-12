@@ -474,7 +474,7 @@ export default function Intro() {
                 and my Instagram (<strong>{SITE.instagramHandle}</strong>)
               </>
             ) : null}
-            , I explore psychology from professional and everyday perspectives, making information
+            , I explore psychology from professional and (   ) everyday perspectives, making information
             practical, understandable and relevant to real life.
           </p>
           <div className="intro-lead">

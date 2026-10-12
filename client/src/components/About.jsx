@@ -62,6 +62,10 @@ const aboutQuestions = [
   },
 ];
 
+const roles = ["Mental Health Educator", "Psychology Content Creator", "Well-Being Workshop Designer"];
+const roleColors = [C.pink, C.orange, C.purple];
+const YT_URL = "https://www.youtube.com/@pragya_prateek_psychologist";
+
 const studentQuestions = [
   "What can I actually do with or after my psychology degree?",
   "Which career path should I explore?",
@@ -240,6 +244,31 @@ export default function About() {
         .ab-icon{transition:transform .45s cubic-bezier(.3,1.5,.5,1)}
         .ab-card:hover .ab-icon{transform:scale(1.1) rotate(-6deg)}
 
+        /* hero caption: name + roles, centred directly under the photo.
+           The roles line scales with the width of this box, so it always fits on one line. */
+        .ab-cap{container-type:inline-size;width:100%;margin:1.6rem auto 0;text-align:center}
+        .about-root .ab-cap-name{font-size:1.3rem;font-weight:800;letter-spacing:-.01em;line-height:1.2}
+        .about-root .ab-roles{display:flex;flex-direction:column;align-items:center;gap:.3rem;margin-top:.7rem;font-size:.95rem;font-weight:600;line-height:1.5;color:${C.soft}}
+        .ab-role-wrap{display:inline-flex;align-items:center;gap:.5em;white-space:nowrap}
+        .ab-role-sep{display:none;font-weight:800}
+        @media (min-width:640px){
+          .about-root .ab-roles{flex-direction:row;flex-wrap:nowrap;justify-content:center;gap:.5em;font-size:.62rem;font-size:clamp(.56rem,2.2cqw,.95rem);letter-spacing:0}
+          .ab-role-sep{display:inline;font-size:1.1em;line-height:1}
+        }
+        @media (min-width:1024px){
+          .ab-cap{max-width:440px}
+        }
+
+        /* youtube links */
+        .ab-pl-link{display:flex;align-items:center;gap:1rem;color:inherit;text-decoration:none}
+        .ab-pl-link .ab-pl-t{transition:color .3s ease}
+        .ab-pl-link:hover .ab-pl-t{color:#e23a5c}
+        .ab-pl-go{margin-left:auto;flex-shrink:0;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:#fff;color:${C.pink};transition:transform .3s ease}
+        .ab-pl-link:hover .ab-pl-go{transform:translate(2px,-2px)}
+        .about-root .ab-pl-p a.ab-yt-a{font-weight:700;color:#e23a5c;border-bottom:1.5px solid rgba(226,58,92,.35);transition:border-color .3s ease}
+        .about-root .ab-pl-p a.ab-yt-a:hover{border-color:#e23a5c}
+        .ab-pl-link:focus-visible,.ab-yt-a:focus-visible{outline:3px solid rgba(255,77,109,.35);outline-offset:4px;border-radius:12px}
+
         /* ---------- Two questions section ---------- */
         .ab-q{position:relative;overflow:hidden;height:100%}
         .ab-q-a{border-radius:34px 34px 34px 8px}
@@ -408,24 +437,31 @@ export default function About() {
         <div className="ab-wrap" style={{ maxWidth: 1120, paddingTop: "clamp(3rem,7vw,5.5rem)", paddingBottom: "clamp(0rem,2vw,1rem)" }}>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-12 items-center">
             {/* PHOTO (left) */}
-            <Reveal dir="left" delay={150} className="lg:col-span-4">
-              <div className="mx-auto lg:mx-0 w-[82%] max-w-[360px] lg:w-full lg:max-w-[400px]">
+            <Reveal dir="left" delay={150} className="min-w-0 lg:col-span-5">
+              <div className="mx-auto w-[82%] max-w-[360px] lg:w-full lg:max-w-[400px]">
                 <div className="ab-photo rounded-[30px] overflow-hidden bg-white p-2.5 shadow-[0_30px_60px_-30px_rgba(20,39,78,.4)]">
                   <div className="aspect-[4/5] rounded-[22px] overflow-hidden" style={{ background: C.tintPink }}>
                     <img src="/pragya.jpeg" alt="Pragya Prateek" className="w-full h-full object-cover" />
                   </div>
                 </div>
-                <div className="mt-6 text-center">
-                  <p className="font-bold text-[1.2rem] leading-tight">Pragya Prateek</p>
-                  <p className="mt-1.5 text-[.95rem] font-medium" style={{ color: C.soft }}>
-                    Mental Health Educator &amp; Content Creator
-                  </p>
-                </div>
+              </div>
+
+              {/* Name + roles, directly below the photo */}
+              <div className="ab-cap">
+                <p className="ab-cap-name">Pragya Prateek</p>
+                <p className="ab-roles">
+                  {roles.map((r, i) => (
+                    <span key={r} className="ab-role-wrap">
+                      {i > 0 && <span className="ab-role-sep" style={{ color: roleColors[i] }} aria-hidden="true">•</span>}
+                      <span className="ab-role">{r}</span>
+                    </span>
+                  ))}
+                </p>
               </div>
             </Reveal>
 
             {/* ABOUT CONTENT (right) */}
-            <div className="lg:col-span-8 text-left">
+            <div className="lg:col-span-7 text-left">
               <h2 className="ab-title ab-hero-h">
                 <span className="block">Psychology, for me,</span>
                 <span className="block lg:whitespace-nowrap">is more than a&nbsp;<Grad>profession.</Grad></span>
@@ -446,19 +482,18 @@ export default function About() {
                 </Reveal>
               </div>
             </div>
+
           </div>
         </div>
       </div>
 
       {/* ================= 2. TWO QUESTIONS ================= */}
       <div className="ab-wrap ab-section">
-        {/* Centered heading */}
+        {/* Heading, aligned left */}
         <Reveal>
-          <div className="flex justify-center">
-            <h3 className="ab-h2 ab-balance text-center" style={{ maxWidth: "22ch" }}>
-              Over time, I found myself particularly drawn to two <Grad>questions:</Grad>
-            </h3>
-          </div>
+          <h3 className="ab-h2 ab-balance text-left" style={{ maxWidth: "24ch" }}>
+            Over time, I found myself particularly drawn to two <Grad>questions:</Grad>
+          </h3>
         </Reveal>
 
         {/* Two questions, staggered so they read as two different doorways */}
@@ -516,7 +551,6 @@ export default function About() {
               {/* Left: title + the story in a few lines */}
               <div className="lg:col-span-5">
                 <div className="flex flex-col" style={{ gap: "1rem" }}>
-                  <Reveal><Label>My Academic Journey</Label></Reveal>
                   <Reveal delay={80}>
                     <h3 className="ab-h2">
                       My Professional <Grad>Background</Grad>
@@ -581,7 +615,6 @@ export default function About() {
           <div className="ab-ap-panel">
             {/* Header */}
             <div className="flex flex-col items-center text-center" style={{ gap: "1rem" }}>
-              <Label light>How I Work</Label>
               <h3 className="ab-h2">
                 My <Grad>Approach</Grad>
               </h3>
@@ -662,7 +695,6 @@ export default function About() {
       <div className="ab-wrap ab-section">
         {/* Header */}
         <div className="flex flex-col items-center text-center" style={{ gap: "1.1rem" }}>
-          <Reveal><Label>Why I Started</Label></Reveal>
           <Reveal delay={80}>
             <h3 className="ab-h2">
               Why I Created These <Grad>Spaces?</Grad>
@@ -708,15 +740,19 @@ export default function About() {
         <div className="ab-why-spaces">
           <Reveal dir="fade">
             <div className="ab-pl" style={{ background: C.tintPink }}>
-              <div className="ab-pl-top">
+              <a className="ab-pl-link" href={YT_URL} target="_blank" rel="noopener noreferrer" aria-label="Visit The Art of Mindful Thinking on YouTube">
                 <span className="ab-pl-ico" style={{ color: C.pink }}><PlayIcon className="w-7 h-7" /></span>
                 <div>
                   <p className="ab-pl-kind">YouTube channel</p>
                   <h4 className="ab-pl-t">The Art of Mindful Thinking</h4>
                 </div>
-              </div>
+                <span className="ab-pl-go" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M7 17L17 7M9 7h8v8" /></svg>
+                </span>
+              </a>
               <p className="ab-pl-p">
-                I created the YouTube channel <strong>The Art of Mindful Thinking</strong> to make these questions easier to
+                I created the YouTube channel{" "}
+                <a className="ab-yt-a" href={YT_URL} target="_blank" rel="noopener noreferrer">The Art of Mindful Thinking</a> to make these questions easier to
                 answer. It is focused on psychology students, aspiring professionals and career guidance by covering psychology
                 career paths, education, emerging areas, professional skills, earning options and practical steps for building a
                 career in the field.

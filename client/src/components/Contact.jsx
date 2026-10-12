@@ -147,8 +147,8 @@ export default function Contact() {
             <div className="contact-card bg-gradient-to-br from-[#eef4ff] to-[#fbf0ff] border-0">
               <b className="font-quicksand text-[1.1rem]">Wherever you are in your journey</b>
               <p className="text-ink-soft text-[.95rem] mt-2">
-                Psychology student, professional or simply curious — send me a message and tell me
-                what you'd like to discuss.
+                Psychology student, professional or simply curious then send me a message and tell me
+                what you did like to discuss.
               </p>
             </div>
 

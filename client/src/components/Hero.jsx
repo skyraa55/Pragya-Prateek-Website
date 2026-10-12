@@ -42,7 +42,7 @@ export default function Hero() {
             content, guidance and learning experiences that connect psychology with real life.
           </p>
 
-          <div className="flex gap-3 flex-wrap">
+          <div className="hero-btns">
             <Link
               className="btn hero-btn hero-btn-primary"
               to="/services"
@@ -54,6 +54,12 @@ export default function Hero() {
               to="/work-with-me"
             >
               Work With Me
+            </Link>
+            <Link
+              className="btn hero-btn hero-btn-yellow"
+              to="/book"
+            >
+              Book a Session
             </Link>
           </div>
         </div>
@@ -88,7 +94,22 @@ export default function Hero() {
         .hero-title   { font-size: clamp(2.1rem, 9vw, 3rem); line-height: 1.05; margin-bottom: 14px; }
         .hero-tagline { font-size: 1.1rem; line-height: 1.35; margin-bottom: 10px; max-width: 34ch; }
         .hero-desc    { font-size: .92rem; line-height: 1.65; margin-bottom: 20px; max-width: 50ch; }
-        .hero-btn     { font-size: .95rem; padding: 12px 22px; }
+        .hero-btn     { font-size: .95rem; padding: 12px 22px; white-space: nowrap; }
+
+        /* two buttons on the first row, "Book a Session" on the next row, centred under them */
+        .hero-banner .hero-btns {
+          display: grid; grid-template-columns: repeat(2, auto);
+          justify-content: start; gap: 12px;
+        }
+        .hero-banner .hero-btns .hero-btn-yellow { grid-column: 1 / -1; justify-self: center; }
+
+        /* ---------- Small phones: three buttons stack neatly, full width ---------- */
+        @media (max-width: 479px) {
+          .hero-banner { min-height: 680px; }
+          .hero-banner .hero-btns { grid-template-columns: 1fr; max-width: 300px; }
+          .hero-banner .hero-btns .hero-btn { justify-content: center; }
+          .hero-banner .hero-btns .hero-btn-yellow { justify-self: stretch; }
+        }
 
         /* ---------- Tablets ---------- */
         @media (min-width: 640px) {
@@ -102,6 +123,7 @@ export default function Hero() {
           .hero-title { font-size: clamp(2.4rem, 6vw, 3.4rem); }
           .hero-tagline { font-size: 1.2rem; }
           .hero-desc { font-size: 1rem; }
+          .hero-btn { font-size: .92rem; padding: 12px 18px; }
         }
 
         /* ---------- Desktop: image pinned right at full height, text on the left ---------- */
@@ -119,7 +141,8 @@ export default function Hero() {
           .hero-title   { font-size: clamp(2.8rem, 5.2vw, 5rem); margin-bottom: 16px; }
           .hero-tagline { font-size: clamp(1.2rem, 1.9vw, 1.8rem); margin-bottom: 12px; }
           .hero-desc    { font-size: clamp(1rem, 1.35vw, 1.3rem); line-height: 1.6; margin-bottom: 24px; }
-          .hero-btn     { font-size: 1.1rem; padding: 14px 28px; }
+          .hero-btn     { font-size: clamp(.9rem, 1.2vw, 1.1rem); padding: clamp(11px, 1vw, 14px) clamp(18px, 1.9vw, 28px); }
+          .hero-banner .hero-btns { gap: 12px; }
         }
 
         /* ---------- Text animations ---------- */
@@ -184,6 +207,25 @@ export default function Hero() {
             0 16px 30px -14px rgba(120,60,80,.5),
             inset 0 1px 0 #fff;
         }
+        /* Book a Session: warm yellow glass, white text */
+        .hero-banner .hero-btn-yellow {
+          color: #fff;
+          background: linear-gradient(135deg, rgba(255,196,32,.97), rgba(255,158,20,.94));
+          border: 1px solid rgba(255,255,255,.7);
+          box-shadow:
+            0 12px 28px -12px rgba(235,140,0,.7),
+            inset 0 1px 0 rgba(255,255,255,.7),
+            inset 0 -1px 0 rgba(255,255,255,.15);
+          text-shadow: 0 1px 2px rgba(150,85,0,.45);
+        }
+        .hero-banner .hero-btn-yellow:hover {
+          transform: translateY(-2px);
+          background: linear-gradient(135deg, rgba(255,205,56,1), rgba(255,168,32,.98));
+          box-shadow:
+            0 18px 34px -12px rgba(235,140,0,.8),
+            inset 0 1px 0 rgba(255,255,255,.8);
+        }
+        .hero-banner .hero-btn:focus-visible { outline: 3px solid rgba(255,61,110,.4); outline-offset: 3px; }
         .hero-banner .hero-arrow { display: inline-block; transition: transform .25s ease; }
         .hero-banner .hero-btn:hover .hero-arrow { transform: translateX(5px); }
 
