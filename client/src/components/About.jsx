@@ -470,8 +470,8 @@ export default function About() {
               <div className="mt-10 md:mt-12 flex flex-col gap-6">
                 <Reveal delay={350}>
                   <p className="ab-hero-p">
-                    I am Pragya Prateek, a <strong className="font-semibold">mental health educator and content creator</strong> with a
-                    simple goal: to make psychology <em>easier to understand, more practical and more relevant to everyday life.</em>
+                    I am Pragya Prateek, with a
+                    simple goal to make psychology <em>easier to understand, more practical and more relevant to everyday life.</em>
                   </p>
                 </Reveal>
                 <Reveal delay={450}>

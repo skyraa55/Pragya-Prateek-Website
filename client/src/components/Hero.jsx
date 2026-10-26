@@ -50,10 +50,10 @@ export default function Hero() {
               Explore My Work <span className="hero-arrow">→</span>
             </Link>
             <Link
-              className="btn hero-btn hero-btn-ghost"
+              className="btn hero-btn hero-btn-primary"
               to="/work-with-me"
             >
-              Work With Me
+              Work With Me <span className="hero-arrow">→</span>
             </Link>
             <Link
               className="btn hero-btn hero-btn-yellow"

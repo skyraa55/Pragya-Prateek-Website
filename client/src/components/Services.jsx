@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { useSite } from "../useSite.js";
 
 /* ---------- Theme (same brand palette as the About page) ---------- */
 const C = {
@@ -23,8 +22,8 @@ const themes = [
   { tint: C.tintYellow, accent: C.orange, deep: "#c96a0a" },
 ];
 
-/* ---------- Content (unchanged) ---------- */
-const buildServices = (guidanceHref) => [
+/* ---------- Content (unchanged, except the removed button in service 3) ---------- */
+const services = [
   {
     title: "One-to-One Psychology Career Guidance Sessions",
     tagline: "Sometimes General Information Isn't Enough.",
@@ -77,12 +76,7 @@ const buildServices = (guidanceHref) => [
       "Developing your professional presence",
       "Understanding how to start and structure your online work",
     ],
-    buttons: [
-      guidanceHref
-        ? { label: "Explore Professional Guidance →", href: guidanceHref, external: true }
-        : { label: "Explore Professional Guidance →", to: "/professional-guidance" },
-      { label: "Start Your Growth Plan →", to: "/book", primary: true },
-    ],
+    buttons: [{ label: "Start Your Growth Plan →", to: "/book", primary: true }],
   },
 ];
 
@@ -132,9 +126,6 @@ function Btn({ b }) {
 
 /* ---------- Page ---------- */
 export default function Services() {
-  const SITE = useSite();
-  const services = buildServices(SITE.professionalGuidanceDocUrl);
-
   return (
     <section id="services" className="services-root" style={{ color: C.navy }}>
       <style>{`
@@ -142,20 +133,19 @@ export default function Services() {
         .services-root{
           font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased;overflow:hidden;
           background:${C.bg};
-          padding:clamp(4rem,8vw,6.5rem) 0 0;
+          padding:clamp(3.5rem,8vw,6.5rem) 0 0;
         }
         .services-root *,.services-root *::before,.services-root *::after{box-sizing:border-box}
         .services-root h2,.services-root h3,.services-root p,.services-root ul{margin:0;padding:0}
         .services-root ul{list-style:none}
         .services-root a{text-decoration:none}
 
-        .sv-wrap{width:92%;max-width:1120px;margin:0 auto}
+        .sv-wrap{width:90%;max-width:1120px;margin:0 auto}
 
         /* header */
-        .sv-head{display:flex;flex-direction:column;align-items:center;gap:1.1rem;text-align:center;padding-bottom:clamp(3rem,6vw,4.5rem)}
-        .sv-label{font-size:.95rem;font-weight:600;color:#e23a5c}
-        .sv-h2{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:700;line-height:1.18;letter-spacing:-.02em}
-        .sv-intro{max-width:62ch;font-size:1.06rem;line-height:1.85;color:${C.soft}}
+        .sv-head{display:flex;flex-direction:column;align-items:center;gap:1.25rem;text-align:center;padding-bottom:clamp(2.5rem,6vw,4.5rem)}
+        .sv-h2{font-size:clamp(1.65rem,5vw,2.8rem);font-weight:700;line-height:1.2;letter-spacing:-.02em}
+        .sv-intro{max-width:62ch;font-size:clamp(.98rem,1.6vw,1.06rem);line-height:1.85;color:${C.soft}}
 
         /* gradient word */
         .sv-word{
@@ -168,59 +158,81 @@ export default function Services() {
         }
         @keyframes svFlow{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 
-        /* scroll reveal (fade only, nothing slides) */
+        /* scroll reveal */
         .sv-rv{opacity:0;transition:opacity .9s cubic-bezier(.22,1,.36,1),transform .9s cubic-bezier(.22,1,.36,1)}
         .sv-up{transform:translateY(16px)}
         .sv-fade{transform:none}
         .sv-in{opacity:1;transform:none}
 
-        /* one full-width band per service: all three are always visible */
-        .sv-band{background:var(--tint);padding:clamp(3.25rem,7vw,5.5rem) 0}
-        .sv-grid{display:grid;grid-template-columns:1fr;gap:clamp(2.25rem,4vw,3rem)}
+        /* one full-width band per service */
+        .sv-band{background:var(--tint);padding:clamp(2.75rem,7vw,5.5rem) 0}
+        .sv-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(2rem,4vw,3rem)}
         @media (min-width:1024px){
-          .sv-grid{grid-template-columns:7fr 5fr;gap:clamp(3.5rem,6vw,5.5rem);align-items:start}
-          .sv-band.sv-flip .sv-grid{grid-template-columns:5fr 7fr}
+          .sv-grid{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(3.5rem,6vw,5.5rem);align-items:start}
+          .sv-band.sv-flip .sv-grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}
           .sv-band.sv-flip .sv-main{order:2}
           .sv-band.sv-flip .sv-side{order:1}
         }
 
         /* reading column */
-        .sv-main{position:relative}
+        .sv-main{position:relative;min-width:0}
         .sv-ghost{
-          position:absolute;right:0;top:-1.2rem;z-index:0;pointer-events:none;user-select:none;
-          font-size:clamp(7rem,15vw,11rem);font-weight:800;line-height:.8;letter-spacing:-.04em;color:var(--accent);opacity:.12;
+          position:absolute;right:0;top:-1rem;z-index:0;pointer-events:none;user-select:none;
+          font-size:clamp(5rem,15vw,11rem);font-weight:800;line-height:.8;letter-spacing:-.04em;color:var(--accent);opacity:.12;
         }
         .sv-main > *:not(.sv-ghost){position:relative;z-index:1}
-        .sv-top{display:flex;align-items:center;gap:1rem;max-width:calc(100% - 4rem)}
-        .sv-num{display:grid;place-items:center;flex-shrink:0;width:48px;height:48px;border-radius:50%;background:var(--accent);color:#fff;font-size:1.15rem;font-weight:800}
+
+        /* number + title */
+        .sv-top{display:flex;align-items:center;gap:1rem;max-width:calc(100% - 3rem)}
+        .sv-num{display:grid;place-items:center;flex-shrink:0;width:44px;height:44px;border-radius:50%;background:var(--accent);color:#fff;font-size:1.1rem;font-weight:800}
         .sv-main.sv-in .sv-num{animation:svPop .8s cubic-bezier(.3,1.5,.5,1) .15s backwards}
         @keyframes svPop{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:none}}
-        .sv-title{font-size:clamp(1.4rem,2.5vw,1.95rem);font-weight:700;line-height:1.25;letter-spacing:-.015em}
-        .sv-tag{margin-top:1.6rem;font-size:1.08rem;font-weight:700;line-height:1.45;color:var(--deep)}
-        .sv-paras{display:flex;flex-direction:column;gap:1.15rem;margin-top:1.25rem;max-width:62ch}
-        .sv-p{font-size:1.04rem;line-height:1.9;color:${C.soft}}
+        .sv-title{font-size:clamp(1.25rem,2.6vw,1.95rem);font-weight:700;line-height:1.3;letter-spacing:-.015em;overflow-wrap:anywhere}
+
+        /* tagline: clear gap below the title */
+        .services-root .sv-tag{
+          margin-top:clamp(1.75rem,4vw,2.5rem);
+          font-size:clamp(1rem,1.8vw,1.1rem);font-weight:700;line-height:1.55;color:var(--deep);
+        }
+        .services-root .sv-paras{display:flex;flex-direction:column;gap:1.15rem;margin-top:clamp(1.1rem,2.5vw,1.5rem);max-width:62ch}
+        .sv-p{font-size:clamp(.98rem,1.5vw,1.04rem);line-height:1.85;color:${C.soft}}
 
         /* list card with the buttons at its foot */
-        .sv-side{background:#fff;border-radius:30px;padding:clamp(1.6rem,3vw,2.4rem);box-shadow:0 28px 54px -38px rgba(20,39,78,.45)}
+        .sv-side{min-width:0;background:#fff;border-radius:28px;padding:clamp(1.4rem,3vw,2.4rem);box-shadow:0 28px 54px -38px rgba(20,39,78,.45)}
         .sv-list-t{font-size:1.06rem;font-weight:700;padding-bottom:1.15rem;border-bottom:1px solid ${C.line}}
-        .sv-items{display:flex;flex-direction:column;gap:1.05rem;margin-top:1.4rem}
-        .sv-item{display:flex;align-items:flex-start;gap:.9rem;font-size:1rem;line-height:1.5;color:${C.navy};opacity:0}
+        .sv-items{display:flex;flex-direction:column;gap:1rem;margin-top:1.4rem}
+        .sv-item{display:flex;align-items:flex-start;gap:.9rem;font-size:.98rem;line-height:1.5;color:${C.navy};opacity:0}
         .sv-ck{display:grid;place-items:center;flex-shrink:0;width:24px;height:24px;margin-top:1px;border-radius:50%;background:var(--tint);color:var(--deep)}
         .sv-side.sv-in .sv-item{opacity:1;animation:svItem .7s cubic-bezier(.22,1,.36,1) backwards;animation-delay:var(--d,0ms)}
         @keyframes svItem{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
-        .sv-btns{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.9rem;padding-top:1.7rem;border-top:1px solid ${C.line}}
+        .sv-btns{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:1.8rem;padding-top:1.6rem;border-top:1px solid ${C.line}}
 
         /* buttons */
         .sv-btn{
-          display:inline-flex;align-items:center;justify-content:center;padding:.8rem 1.4rem;border-radius:999px;
-          font-family:inherit;font-size:.92rem;font-weight:700;line-height:1.2;border:1.5px solid transparent;cursor:pointer;
+          display:inline-flex;align-items:center;justify-content:center;text-align:center;padding:.85rem 1.4rem;border-radius:999px;
+          font-family:inherit;font-size:.92rem;font-weight:700;line-height:1.25;border:1.5px solid transparent;cursor:pointer;
           transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease,color .3s ease;
         }
         .sv-btn:hover{transform:translateY(-2px)}
+        .sv-btn:focus-visible{outline:3px solid ${C.purple};outline-offset:3px}
         .sv-btn-primary{color:#fff;background:linear-gradient(120deg,${C.pink},${C.orange});box-shadow:0 14px 26px -14px rgba(255,77,109,.75)}
         .sv-btn-primary:hover{box-shadow:0 18px 30px -14px rgba(255,77,109,.85)}
         .sv-btn-line{color:${C.navy};background:#fff;border-color:rgba(20,39,78,.18)}
         .sv-btn-line:hover{border-color:var(--accent);color:var(--deep)}
+
+        /* tablet */
+        @media (max-width:1023px){
+          .sv-side{max-width:640px}
+        }
+
+        /* phones: full-width stacked buttons, tighter badge */
+        @media (max-width:560px){
+          .sv-top{gap:.8rem;max-width:calc(100% - 2.5rem)}
+          .sv-num{width:38px;height:38px;font-size:1rem}
+          .sv-side{border-radius:22px}
+          .sv-btns{flex-direction:column}
+          .sv-btn{width:100%}
+        }
 
         @media (prefers-reduced-motion:reduce){
           .services-root *,.services-root *::before,.services-root *::after{animation:none!important;transition:none!important}
@@ -231,7 +243,6 @@ export default function Services() {
       {/* Header */}
       <div className="sv-wrap">
         <div className="sv-head">
-          <Reveal><span className="sv-label">Services</span></Reveal>
           <Reveal delay={80}>
             <h2 className="sv-h2">
               Ways We Can <Grad>Work Together!</Grad>
