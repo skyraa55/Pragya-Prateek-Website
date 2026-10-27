@@ -200,11 +200,11 @@ export default function Footer() {
               {/* Areas of Work */}
               <div className="sm:col-span-2 lg:col-span-4">
                 <ColumnTitle>Areas of Work</ColumnTitle>
-                <FootLink to="/services">Psychology Career Guidance</FootLink>
-                <FootLink to="/workshops">Workshops &amp; Programs</FootLink>
-                <FootLink to="/services">Professional Growth Guidance</FootLink>
-                <FootLink to="/work-with-me">Educational Content</FootLink>
-                <FootLink to="/blog">Everyday Psychology</FootLink>
+                <div >Psychology Career Guidance</div>
+                <div >Workshops &amp; Programs</div>
+                <div >Professional Growth Guidance</div>
+                <div >Educational Content</div>
+                <div >Everyday Psychology</div>
               </div>
             </div>
 

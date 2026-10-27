@@ -150,11 +150,11 @@ export default function Navbar() {
             to="/"
             onClick={() => setOpen(false)}
           >
-            <img
-              src="/mental-health-logo.png"
-              alt="Pragya Prateek"
-              className="h-14 sm:h-16 lg:h-[4.5rem] w-auto object-contain origin-center"
-            />
+           <img
+  src="/mental-health-logo.png"
+  alt="Pragya Prateek"
+  className="h-14 sm:h-16 lg:h-20 xl:h-[5.75rem] w-auto object-contain origin-center"
+/>
           </Link>
 
           {/* Links */}

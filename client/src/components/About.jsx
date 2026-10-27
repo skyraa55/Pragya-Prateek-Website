@@ -189,6 +189,7 @@ export default function About() {
         .about-root a,.about-root em,.about-root strong{text-decoration:none}
 
         .ab-wrap{width:92%;max-width:1040px;margin:0 auto}
+        @media (min-width:1024px){.ab-wrap{max-width:1120px}}
         .ab-section{margin-top:clamp(4.5rem,9vw,7.5rem)}
         .ab-h1{font-size:clamp(2.1rem,5vw,3.6rem);font-weight:700;line-height:1.14;letter-spacing:-.025em}
         .ab-h2{font-size:clamp(1.7rem,3.6vw,2.6rem);font-weight:700;line-height:1.18;letter-spacing:-.02em}
@@ -222,14 +223,30 @@ export default function About() {
         .ab-hero-p{font-size:1.125rem;line-height:1.85;max-width:52ch}
         .ab-hero-p em{font-style:italic;font-weight:500;color:${C.navy}}
 
+        /* laptop: bigger hero type + wider text so the right side feels filled */
+        @media (min-width:1024px){
+          .ab-hero-h{font-size:clamp(2.3rem,2.9vw,2.8rem)}
+          .ab-hero-p{font-size:1.2rem;max-width:60ch}
+        }
+
         /* hero lines */
         .ab-line{display:block;opacity:0;transform:translateY(20px);animation:abLine .8s cubic-bezier(.22,1,.36,1) forwards}
         @keyframes abLine{to{opacity:1;transform:none}}
 
         /* hero backdrop */
-        .ab-hero-bg{background:
+        .ab-hero-bg{position:relative;overflow:hidden;background:
           radial-gradient(60% 50% at 15% 0%, ${C.tintPink} 0%, transparent 70%),
           radial-gradient(55% 45% at 90% 10%, ${C.tintPurple} 0%, transparent 70%)}
+        .ab-blob{position:absolute;border-radius:50%;pointer-events:none;filter:blur(2px)}
+        .ab-blob-a{width:340px;height:340px;right:-110px;bottom:-80px;background:radial-gradient(circle,${C.tintYellow} 0%,transparent 70%)}
+        .ab-blob-b{width:260px;height:260px;right:22%;top:-90px;background:radial-gradient(circle,${C.tintBlue} 0%,transparent 70%)}
+        .ab-hero-inner{position:relative;z-index:1}
+
+        /* hero focus chips (fills the right side on laptop) */
+        .ab-focus{display:flex;flex-wrap:wrap;gap:.75rem}
+        .ab-focus-chip{display:inline-flex;align-items:center;gap:.6rem;background:#fff;border-radius:999px;padding:.55rem 1.1rem .55rem .55rem;font-size:.95rem;font-weight:600;
+          box-shadow:0 10px 22px -16px rgba(20,39,78,.45)}
+        .ab-focus-ico{display:grid;place-items:center;width:30px;height:30px;border-radius:50%}
 
         /* photo + floating tags */
         .ab-photo{transition:transform .8s cubic-bezier(.22,1,.36,1)}
@@ -244,19 +261,33 @@ export default function About() {
         .ab-icon{transition:transform .45s cubic-bezier(.3,1.5,.5,1)}
         .ab-card:hover .ab-icon{transform:scale(1.1) rotate(-6deg)}
 
-        /* hero caption: name + roles, centred directly under the photo.
-           The roles line scales with the width of this box, so it always fits on one line. */
-        .ab-cap{container-type:inline-size;width:100%;margin:1.6rem auto 0;text-align:center}
+        /* hero caption: name + roles.
+           Always directly under the photo, on every screen size.
+           Roles are ALWAYS on one horizontal line with "•" separators (no wrapping).
+           Mobile/tablet: font size scales with the caption width (cqw).
+           Laptop: caption box is wider than the photo column and the font size scales with the screen width (vw). */
+        .ab-cap{container-type:inline-size;width:100%;margin:0;text-align:center}
         .about-root .ab-cap-name{font-size:1.3rem;font-weight:800;letter-spacing:-.01em;line-height:1.2}
-        .about-root .ab-roles{display:flex;flex-direction:column;align-items:center;gap:.3rem;margin-top:.7rem;font-size:.95rem;font-weight:600;line-height:1.5;color:${C.soft}}
+        .about-root .ab-roles{
+          display:flex;flex-direction:row;flex-wrap:nowrap;justify-content:center;align-items:center;
+          gap:.5em;margin-top:.7rem;
+          font-size:.4rem;font-size:clamp(.38rem,2cqw,.95rem);
+          font-weight:600;line-height:1.5;letter-spacing:0;color:${C.soft}
+        }
         .ab-role-wrap{display:inline-flex;align-items:center;gap:.5em;white-space:nowrap}
-        .ab-role-sep{display:none;font-weight:800}
+        .ab-role-sep{display:inline;font-weight:800;font-size:1.1em;line-height:1}
         @media (min-width:640px){
-          .about-root .ab-roles{flex-direction:row;flex-wrap:nowrap;justify-content:center;gap:.5em;font-size:.62rem;font-size:clamp(.56rem,2.2cqw,.95rem);letter-spacing:0}
-          .ab-role-sep{display:inline;font-size:1.1em;line-height:1}
+          .about-root .ab-roles{font-size:.62rem;font-size:clamp(.56rem,2.2cqw,.95rem)}
         }
         @media (min-width:1024px){
-          .ab-cap{max-width:440px}
+          /* wide, centred box so the bigger one-line text has room on both sides of the photo */
+          .ab-cap{width:calc(100% + 16rem);margin-left:-8rem;margin-right:-8rem}
+          .about-root .ab-cap-name{font-size:1.7rem}
+          .about-root .ab-roles{
+            gap:.5em;margin-top:.8rem;
+            font-size:.58rem;font-size:clamp(.56rem,.9vw,.85rem);
+            color:${C.navy}
+          }
         }
 
         /* youtube links */
@@ -292,6 +323,15 @@ export default function About() {
           .ab-thread-m{display:none}
         }
         .ab-thread-m{width:2px;height:40px;margin:0 auto;background:repeating-linear-gradient(to bottom,${C.line} 0 6px,transparent 6px 11px)}
+
+        /* "Over time..." heading: left on mobile/tablet, CENTRED on laptop.
+           (uses .about-root prefix so it beats the h3 margin reset) */
+        .ab-over-wrap{text-align:left}
+        .about-root .ab-over{max-width:24ch}
+        @media (min-width:1024px){
+          .ab-over-wrap{text-align:center}
+          .about-root .ab-over{text-align:center;margin-left:auto;margin-right:auto;max-width:28ch}
+        }
 
         /* ---------- Professional background section ---------- */
         .ab-pb-panel{border-radius:clamp(28px,4vw,44px);background:${C.tintPurple};padding:clamp(1.75rem,5vw,4.25rem)}
@@ -434,10 +474,15 @@ export default function About() {
 
       {/* ================= 1. HERO ================= */}
       <div className="ab-hero-bg">
-        <div className="ab-wrap" style={{ maxWidth: 1120, paddingTop: "clamp(3rem,7vw,5.5rem)", paddingBottom: "clamp(0rem,2vw,1rem)" }}>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-12 items-center">
+        <span className="ab-blob ab-blob-a" aria-hidden="true" />
+        <span className="ab-blob ab-blob-b" aria-hidden="true" />
+        <div
+          className="ab-wrap ab-hero-inner"
+          style={{ maxWidth: 1200, paddingTop: "clamp(3rem,7vw,5.5rem)", paddingBottom: "clamp(1rem,3vw,2.5rem)" }}
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-x-16 lg:gap-y-10 items-center">
             {/* PHOTO (left) */}
-            <Reveal dir="left" delay={150} className="min-w-0 lg:col-span-5">
+            <Reveal dir="left" delay={150} className="min-w-0 order-1 lg:col-span-5 lg:col-start-1 lg:row-start-1">
               <div className="mx-auto w-[82%] max-w-[360px] lg:w-full lg:max-w-[400px]">
                 <div className="ab-photo rounded-[30px] overflow-hidden bg-white p-2.5 shadow-[0_30px_60px_-30px_rgba(20,39,78,.4)]">
                   <div className="aspect-[4/5] rounded-[22px] overflow-hidden" style={{ background: C.tintPink }}>
@@ -445,8 +490,10 @@ export default function About() {
                   </div>
                 </div>
               </div>
+            </Reveal>
 
-              {/* Name + roles, directly below the photo */}
+            {/* NAME + ROLES: directly under the photo on every screen size */}
+            <Reveal delay={250} className="min-w-0 order-2 -mt-6 lg:-mt-5 lg:col-span-5 lg:col-start-1 lg:row-start-2">
               <div className="ab-cap">
                 <p className="ab-cap-name">Pragya Prateek</p>
                 <p className="ab-roles">
@@ -461,7 +508,7 @@ export default function About() {
             </Reveal>
 
             {/* ABOUT CONTENT (right) */}
-            <div className="lg:col-span-7 text-left">
+            <div className="order-3 lg:col-span-7 lg:col-start-6 lg:row-start-1 text-left">
               <h2 className="ab-title ab-hero-h">
                 <span className="block">Psychology, for me,</span>
                 <span className="block lg:whitespace-nowrap">is more than a&nbsp;<Grad>profession.</Grad></span>
@@ -480,18 +527,31 @@ export default function About() {
                     continuous exploration of how psychological knowledge can be applied <em>beyond traditional settings.</em>
                   </p>
                 </Reveal>
+
+                {/* ===== HERO FOCUS CHIPS (delete this block if you don't want it) ===== */}
+                <Reveal delay={550}>
+                  <div className="ab-focus">
+                    {aboutQuestions.map((q) => (
+                      <span key={q.tag} className="ab-focus-chip" style={{ color: C.navy }}>
+                        <span className="ab-focus-ico" style={{ background: q.tint, color: q.color }}>
+                          {q.icon === "cap" ? <CapIcon className="w-4 h-4" /> : <HeartIcon className="w-4 h-4" />}
+                        </span>
+                        {q.tag}
+                      </span>
+                    ))}
+                  </div>
+                </Reveal>
               </div>
             </div>
-
           </div>
         </div>
       </div>
 
       {/* ================= 2. TWO QUESTIONS ================= */}
       <div className="ab-wrap ab-section">
-        {/* Heading, aligned left */}
-        <Reveal>
-          <h3 className="ab-h2 ab-balance text-left" style={{ maxWidth: "24ch" }}>
+        {/* Heading: left on mobile/tablet, centred on laptop */}
+        <Reveal className="ab-over-wrap">
+          <h3 className="ab-h2 ab-balance ab-over">
             Over time, I found myself particularly drawn to two <Grad>questions:</Grad>
           </h3>
         </Reveal>
