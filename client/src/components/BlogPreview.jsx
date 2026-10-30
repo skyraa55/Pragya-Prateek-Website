@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { GraduationCap, Baby, HeartHandshake, Users, Brain, Sparkles, Leaf } from "lucide-react";
 import { api } from "../api.js";
 import { BLOG_CATEGORIES } from "../siteConfig.js";
+import { mergeBlogs } from "./Blogsdata.js";
 import BlogCard, { accentStyle } from "./BlogCard.jsx";
 
 /* Maps the `iconName` in siteConfig.js to the real icon component.
@@ -52,14 +53,13 @@ function SubHeading({ children }) {
 
 export default function BlogPreview() {
   const [posts, setPosts] = useState(null);
-  const [error, setError] = useState("");
 
-  useEffect(() => {
-    api
-      .getBlogs()
-      .then((p) => setPosts(p.slice(0, 3)))
-      .catch((e) => setError(e.message));
-  }, []);
+useEffect(() => {
+  api
+    .getBlogs()
+    .then((data) => setPosts(mergeBlogs(data)))
+    .catch(() => setPosts(mergeBlogs([])));
+}, []);
 
   return (
     <section
@@ -133,13 +133,7 @@ export default function BlogPreview() {
         {/* ---------- Latest posts ---------- */}
         <SubHeading>Latest posts</SubHeading>
 
-        {error && (
-          <p className="rounded-2xl border border-dashed border-[#ffd3da] bg-white px-4 py-6 text-center text-[.9rem] text-[#c0324a] sm:py-8 sm:text-base">
-            {error}
-          </p>
-        )}
-
-        {!error && !posts && (
+        {!posts && (
           <div
             className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:gap-7"
             aria-label="Loading posts"

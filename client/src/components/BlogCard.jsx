@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { formatDate } from "../api.js";
-import { BLOG_CATEGORIES } from "../siteConfig.js";
+import { categoryMeta, readMinutes } from "./blogUtils.js";
 
 /* =========================================================
-   Accent colours: change these hex values to match your site.
+   Accent colours (same palette as Intro.jsx).
    a1/a2 = accent pair, glow = a1 as r,g,b, tint = soft bg,
    text = readable accent colour for text on white.
    Same category always gets the same accent.
@@ -30,68 +30,53 @@ export function accentStyle(index) {
 
 function ArrowIcon() {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      width="16"
-      height="16"
-      fill="none"
-      aria-hidden="true"
-      className="transition-transform duration-300 group-hover:translate-x-1"
-    >
-      <path
-        d="M5 12h14M13 6l6 6-6 6"
-        stroke="currentColor"
-        strokeWidth="2.4"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" aria-hidden="true">
+      <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
 
 export default function BlogCard({ post }) {
-  const index = BLOG_CATEGORIES.findIndex((c) => c.name === post.category);
+  const { index, Icon } = categoryMeta(post.category);
 
   return (
     <Link
       to={`/blog/${post.slug}`}
-      style={accentStyle(index < 0 ? 0 : index)}
-      className="group flex h-full flex-col overflow-hidden rounded-[18px] border border-[#eadfd6] bg-white text-[#14274e] no-underline shadow-[0_8px_24px_rgba(20,39,78,0.06)] transition duration-300 hover:-translate-y-1.5 hover:border-[rgba(var(--glow),0.4)] hover:shadow-[0_18px_40px_rgba(var(--glow),0.2)] focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-[3px] focus-visible:outline-[color:var(--a1)] motion-reduce:transition-none"
+      style={{
+        ...accentStyle(index),
+        backgroundImage: "linear-gradient(180deg, #fff 0%, var(--tint) 100%)",
+      }}
+      className="group flex h-full min-w-0 flex-col overflow-hidden rounded-[18px] border border-[#eadfd6] p-4 text-[#14274e] no-underline shadow-[0_10px_30px_rgba(20,39,78,0.06)] transition duration-300 hover:-translate-y-1.5 hover:border-[rgba(var(--glow),0.4)] hover:shadow-[0_18px_40px_rgba(var(--glow),0.18)] focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-[3px] focus-visible:outline-[color:var(--a1)] motion-reduce:transition-none sm:rounded-[20px] sm:p-5 lg:p-6"
     >
-      {/* ---------- Top panel ---------- */}
-      <div
-        className="relative flex h-[116px] items-center justify-center sm:h-[136px]"
-        style={{
-          backgroundColor: "var(--tint)",
-          backgroundImage:
-            "radial-gradient(circle at 18% 22%, rgba(var(--glow), 0.24), transparent 55%), radial-gradient(circle at 88% 90%, rgba(var(--glow), 0.16), transparent 50%)",
-        }}
-      >
-        <span className="absolute left-3.5 top-3.5 max-w-[calc(100%-1.8rem)] truncate rounded-full border border-white/95 bg-white/70 px-3 py-[5px] text-[.74rem] font-bold text-[#14274e] backdrop-blur-lg">
-          {post.category}
-        </span>
+      {/* category */}
+      <div className="mb-3.5 flex min-w-0 items-center gap-2.5 sm:mb-4">
         <span
           aria-hidden="true"
-          className="grid h-[60px] w-[60px] place-items-center rounded-full bg-white text-[1.75rem] shadow-[0_8px_20px_rgba(var(--glow),0.25)] transition-transform duration-300 group-hover:-translate-y-[3px] sm:h-[68px] sm:w-[68px] sm:text-[2rem]"
+          className="grid h-8 w-8 flex-none place-items-center rounded-xl bg-white text-[color:var(--at)] shadow-[0_4px_12px_rgba(var(--glow),0.18)] transition duration-300 group-hover:-rotate-6 group-hover:scale-105 motion-reduce:transition-none sm:h-9 sm:w-9"
         >
-          {post.icon}
+          <Icon className="h-4 w-4 sm:h-[18px] sm:w-[18px]" strokeWidth={1.9} />
+        </span>
+        <span className="truncate text-[.68rem] font-bold uppercase tracking-[.09em] text-[color:var(--at)] sm:text-[.72rem]">
+          {post.category}
         </span>
       </div>
 
-      {/* ---------- Body ---------- */}
-      <div className="flex flex-1 flex-col gap-2 px-5 pb-6 pt-5">
-        <span className="text-[.78rem] text-[#4a5a7a]">{formatDate(post.createdAt)}</span>
+      <h3 className="mb-2 overflow-hidden break-words text-[1.05rem] font-bold leading-[1.35] transition-colors duration-300 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3] group-hover:text-[color:var(--at)] sm:mb-2.5 sm:text-[1.12rem] sm:[-webkit-line-clamp:2] lg:text-[1.15rem]">
+        {post.title}
+      </h3>
 
-        <h3 className="text-[1.13rem] font-bold leading-[1.35] overflow-hidden [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] transition-colors duration-300 group-hover:text-[color:var(--at)]">
-          {post.title}
-        </h3>
+      <p className="flex-1 overflow-hidden break-words text-[.88rem] leading-[1.7] text-[#4a5a7a] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3] sm:text-[.92rem]">
+        {post.excerpt}
+      </p>
 
-        <p className="flex-1 text-[.92rem] leading-[1.65] text-[#4a5a7a] overflow-hidden [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:3]">
-          {post.excerpt}
-        </p>
-
-        <span className="mt-1.5 inline-flex items-center gap-1.5 text-[.9rem] font-bold text-[color:var(--at)]">
-          Read more
+      <div className="mt-4 flex items-center justify-between gap-3 border-t border-[#eadfd6] pt-3.5 sm:mt-5 sm:pt-4">
+        <span className="min-w-0 text-[.76rem] leading-[1.5] text-[#4a5a7a] sm:text-[.8rem]">
+          {formatDate(post.createdAt)} <span aria-hidden="true">·</span> {readMinutes(post)} min read
+        </span>
+        <span
+          aria-hidden="true"
+          className="grid h-8 w-8 flex-none place-items-center rounded-full border border-[rgba(var(--glow),0.35)] bg-white text-[color:var(--at)] transition duration-300 group-hover:border-transparent group-hover:bg-[color:var(--a1)] group-hover:text-white motion-reduce:transition-none"
+        >
           <ArrowIcon />
         </span>
       </div>
