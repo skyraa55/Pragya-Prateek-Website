@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 /* ------------------------------------------------------------------ */
@@ -264,6 +264,9 @@ export default function Workshops() {
   const [active, setActive] = useState(0);
   const [failed, setFailed] = useState({});
 
+  const thumbsRef = useRef(null);
+  const touchX = useRef(null);
+
   useEffect(() => {
     document.title = "Workshops & Programs — Pragya Prateek";
   }, []);
@@ -272,6 +275,14 @@ export default function Workshops() {
   useEffect(() => {
     if (lightbox !== null) setActive(lightbox);
   }, [lightbox]);
+
+  // keep the active thumbnail visible inside the scrolling strip
+  useEffect(() => {
+    const el = thumbsRef.current?.children[active];
+    if (el && el.scrollIntoView) {
+      el.scrollIntoView({ block: "nearest", inline: "center", behavior: "smooth" });
+    }
+  }, [active]);
 
   useEffect(() => {
     if (lightbox === null) return;
@@ -290,6 +301,19 @@ export default function Workshops() {
   }, [lightbox]);
 
   const go = (dir) => setActive((i) => (i + dir + PHOTOS.length) % PHOTOS.length);
+  const goLightbox = (dir) =>
+    setLightbox((i) => (i + dir + PHOTOS.length) % PHOTOS.length);
+
+  /* simple swipe support for phones */
+  const onTouchStart = (e) => {
+    touchX.current = e.touches[0].clientX;
+  };
+  const onTouchEnd = (e, handler) => {
+    if (touchX.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchX.current;
+    touchX.current = null;
+    if (Math.abs(dx) > 40) handler(dx < 0 ? 1 : -1);
+  };
 
   const totalMinutes = SESSIONS.reduce((sum, s) => sum + s.minutes, 0);
 
@@ -463,101 +487,130 @@ export default function Workshops() {
           .ws-grid-2 { grid-template-columns: 1fr 1fr; }
         }
 
-        /* ---------- Gallery (viewer + thumbnails) ---------- */
+        /* ---------- Gallery (viewer + controls + thumbnails) ---------- */
         .ws-stage {
-          position: relative;
-          padding: clamp(.6rem, 2vw, 1rem);
+          width: 100%;
+          max-width: 100%;
+          padding: clamp(.5rem, 2vw, 1rem);
           background: linear-gradient(180deg, #fff 0%, var(--c-bg) 100%);
           border: 1px solid var(--c-line);
-          border-radius: clamp(18px, 2.5vw, 26px);
+          border-radius: clamp(16px, 2.5vw, 26px);
           box-shadow: 0 14px 40px rgba(20, 39, 78, .08);
         }
+
+        /* The frame keeps a fixed ratio, so the photo can never spill out or overlap anything */
         .ws-stage-main {
-          display: grid;
-          place-items: center;
+          position: relative;
+          display: block;
           width: 100%;
-          height: clamp(260px, 62vw, 600px);
+          aspect-ratio: 4 / 3;
+          max-height: 70vh;
           padding: 0;
+          margin: 0;
           border: 0;
-          border-radius: clamp(12px, 2vw, 18px);
+          border-radius: clamp(10px, 2vw, 18px);
           background: #fff4ec;
           cursor: zoom-in;
           overflow: hidden;
+          touch-action: pan-y;
+        }
+        @media (min-width: 768px) {
+          .ws-stage-main { aspect-ratio: 16 / 10; max-height: 600px; }
         }
         .ws-stage-main img {
+          position: absolute;
+          inset: 0;
           width: 100%;
           height: 100%;
-          object-fit: contain;   /* the whole collage always stays visible */
+          object-fit: contain;   /* the whole photo always stays visible */
           display: block;
           animation: wsFade .4s ease;
         }
         @keyframes wsFade { from { opacity: 0; } to { opacity: 1; } }
         .ws-stage-main:focus-visible { outline: 3px solid var(--c-navy); outline-offset: 3px; }
         .ws-stage-missing {
+          display: grid;
+          place-items: center;
+          text-align: center;
           cursor: default;
           color: var(--c-navy-soft);
           font-size: .95rem;
         }
 
+        /* controls live BELOW the photo, so nothing sits on top of it */
+        .ws-stage-bar {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: clamp(.75rem, 3vw, 1.25rem);
+          margin-top: clamp(.6rem, 2vw, .9rem);
+        }
         .ws-stage-btn {
-          position: absolute;
-          top: 50%;
+          flex: none;
           display: grid;
           place-items: center;
-          width: 42px;
-          height: 42px;
-          margin-top: -21px;
-          border: 1.5px solid rgba(255, 255, 255, .95);
+          width: 40px;
+          height: 40px;
+          padding: 0 0 3px;
+          border: 1.5px solid var(--c-line);
           border-radius: 50%;
-          background: rgba(255, 255, 255, .85);
-          -webkit-backdrop-filter: blur(8px);
-          backdrop-filter: blur(8px);
+          background: #fff;
           color: var(--c-navy);
           font-size: 1.5rem;
           line-height: 1;
           cursor: pointer;
-          box-shadow: 0 6px 16px rgba(20, 39, 78, .18);
-          transition: transform .3s ease, color .3s ease;
+          box-shadow: 0 6px 16px rgba(20, 39, 78, .12);
+          transition: transform .3s ease, color .3s ease, border-color .3s ease;
         }
-        .ws-stage-btn:hover { transform: scale(1.08); color: var(--c-pink); }
+        .ws-stage-btn:hover { transform: scale(1.08); color: var(--c-pink); border-color: var(--c-pink); }
         .ws-stage-btn:focus-visible { outline: 3px solid var(--c-navy); outline-offset: 3px; }
-        .ws-stage-prev { left: clamp(1rem, 3vw, 1.6rem); }
-        .ws-stage-next { right: clamp(1rem, 3vw, 1.6rem); }
         .ws-stage-count {
-          position: absolute;
-          right: clamp(1rem, 3vw, 1.6rem);
-          bottom: clamp(1rem, 3vw, 1.6rem);
-          padding: .25rem .7rem;
+          min-width: 64px;
+          text-align: center;
+          padding: .3rem .8rem;
           border-radius: 999px;
-          font-size: .78rem;
+          font-size: .82rem;
           font-weight: 700;
           color: var(--c-navy);
-          background: rgba(255, 255, 255, .9);
-          box-shadow: 0 4px 10px rgba(20, 39, 78, .15);
+          background: #fff;
+          border: 1.5px solid var(--c-line);
         }
 
+        /* thumbnails: one tidy row that scrolls sideways on small screens */
         .ws-thumbs {
           display: grid;
-          grid-template-columns: repeat(5, 1fr);
+          grid-template-columns: repeat(5, minmax(68px, 1fr));
           gap: clamp(.4rem, 1.5vw, .8rem);
-          margin-top: clamp(.7rem, 2vw, 1rem);
+          margin-top: clamp(.6rem, 2vw, .9rem);
+          padding: 4px 2px 8px;
+          overflow-x: auto;
+          overflow-y: hidden;
+          scroll-snap-type: x proximity;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: thin;
         }
         .ws-thumb {
+          position: relative;
+          display: block;
+          width: 100%;
           padding: 0;
           overflow: hidden;
           aspect-ratio: 4 / 3;
           border: 2px solid transparent;
-          border-radius: clamp(10px, 1.5vw, 14px);
+          border-radius: clamp(8px, 1.5vw, 14px);
           background: #fff4ec;
           box-shadow: 0 6px 16px rgba(20, 39, 78, .08);
           cursor: pointer;
           opacity: .6;
+          scroll-snap-align: center;
           transition: opacity .3s ease, border-color .3s ease, transform .3s ease;
         }
         .ws-thumb img {
+          position: absolute;
+          inset: 0;
           width: 100%;
           height: 100%;
-          object-fit: contain;
+          object-fit: cover;
           display: block;
         }
         .ws-thumb:hover { opacity: 1; transform: translateY(-2px); }
@@ -565,7 +618,7 @@ export default function Workshops() {
         .ws-thumb:focus-visible { outline: 3px solid var(--c-navy); outline-offset: 2px; }
 
         @media (max-width: 560px) {
-          .ws-stage-btn { width: 36px; height: 36px; margin-top: -18px; font-size: 1.25rem; }
+          .ws-stage-btn { width: 44px; height: 44px; }  /* easier to tap */
         }
 
         /* ---------- Themes ---------- */
@@ -914,17 +967,23 @@ export default function Workshops() {
           position: fixed;
           inset: 0;
           z-index: 50;
-          display: grid;
-          place-items: center;
-          padding: 1rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 4rem 1rem;
           background: rgba(20, 39, 78, .88);
           -webkit-backdrop-filter: blur(6px);
           backdrop-filter: blur(6px);
+          touch-action: pan-y;
         }
         .ws-lb img {
+          display: block;
           max-width: 100%;
-          max-height: 85vh;
-          border-radius: 18px;
+          max-height: 100%;
+          width: auto;
+          height: auto;
+          object-fit: contain;
+          border-radius: 14px;
           box-shadow: 0 24px 60px rgba(0, 0, 0, .45);
         }
         .ws-lb-btn {
@@ -933,6 +992,7 @@ export default function Workshops() {
           place-items: center;
           width: 46px;
           height: 46px;
+          padding: 0;
           border-radius: 50%;
           border: 0;
           background: rgba(255, 255, 255, .92);
@@ -946,6 +1006,15 @@ export default function Workshops() {
         .ws-lb-close { top: 1rem; right: 1rem; }
         .ws-lb-prev  { left: .75rem; top: 50%; margin-top: -23px; }
         .ws-lb-next  { right: .75rem; top: 50%; margin-top: -23px; }
+
+        /* on phones the arrows sit under the photo instead of covering it */
+        @media (max-width: 767px) {
+          .ws-lb { padding: 4rem .75rem 5rem; }
+          .ws-lb-prev,
+          .ws-lb-next { top: auto; bottom: 1rem; margin-top: 0; }
+          .ws-lb-prev { left: calc(50% - 58px); }
+          .ws-lb-next { right: calc(50% - 58px); }
+        }
 
         /* ---------- Responsive ---------- */
         @media (max-width: 560px) {
@@ -1008,6 +1077,8 @@ export default function Workshops() {
                 type="button"
                 className="ws-stage-main"
                 onClick={() => setLightbox(active)}
+                onTouchStart={onTouchStart}
+                onTouchEnd={(e) => onTouchEnd(e, go)}
                 aria-label={`Open workshop photo ${active + 1} full screen`}
               >
                 <img
@@ -1019,24 +1090,26 @@ export default function Workshops() {
               </button>
             )}
 
-            <button type="button" className="ws-stage-btn ws-stage-prev" aria-label="Previous photo" onClick={() => go(-1)}>‹</button>
-            <button type="button" className="ws-stage-btn ws-stage-next" aria-label="Next photo" onClick={() => go(1)}>›</button>
-            <span className="ws-stage-count">{active + 1} / {PHOTOS.length}</span>
-          </div>
+            <div className="ws-stage-bar">
+              <button type="button" className="ws-stage-btn" aria-label="Previous photo" onClick={() => go(-1)}>‹</button>
+              <span className="ws-stage-count" aria-live="polite">{active + 1} / {PHOTOS.length}</span>
+              <button type="button" className="ws-stage-btn" aria-label="Next photo" onClick={() => go(1)}>›</button>
+            </div>
 
-          <div className="ws-thumbs">
-            {PHOTOS.map((src, i) => (
-              <button
-                key={src}
-                type="button"
-                className={`ws-thumb${i === active ? " is-active" : ""}`}
-                onClick={() => setActive(i)}
-                aria-label={`Show workshop photo ${i + 1}`}
-                aria-current={i === active ? "true" : undefined}
-              >
-                <img src={src} alt="" loading="lazy" />
-              </button>
-            ))}
+            <div className="ws-thumbs" ref={thumbsRef}>
+              {PHOTOS.map((src, i) => (
+                <button
+                  key={src}
+                  type="button"
+                  className={`ws-thumb${i === active ? " is-active" : ""}`}
+                  onClick={() => setActive(i)}
+                  aria-label={`Show workshop photo ${i + 1}`}
+                  aria-current={i === active ? "true" : undefined}
+                >
+                  <img src={src} alt="" loading="lazy" />
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -1223,6 +1296,8 @@ export default function Workshops() {
           aria-label="Workshop photo viewer"
           className="ws-lb"
           onClick={() => setLightbox(null)}
+          onTouchStart={onTouchStart}
+          onTouchEnd={(e) => onTouchEnd(e, goLightbox)}
         >
           <img
             src={PHOTOS[lightbox]}
@@ -1241,7 +1316,7 @@ export default function Workshops() {
             type="button"
             aria-label="Previous photo"
             className="ws-lb-btn ws-lb-prev"
-            onClick={(e) => { e.stopPropagation(); setLightbox((lightbox - 1 + PHOTOS.length) % PHOTOS.length); }}
+            onClick={(e) => { e.stopPropagation(); goLightbox(-1); }}
           >
             ‹
           </button>
@@ -1249,7 +1324,7 @@ export default function Workshops() {
             type="button"
             aria-label="Next photo"
             className="ws-lb-btn ws-lb-next"
-            onClick={(e) => { e.stopPropagation(); setLightbox((lightbox + 1) % PHOTOS.length); }}
+            onClick={(e) => { e.stopPropagation(); goLightbox(1); }}
           >
             ›
           </button>
